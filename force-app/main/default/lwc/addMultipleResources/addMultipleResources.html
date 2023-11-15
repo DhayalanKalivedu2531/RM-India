@@ -1,0 +1,283 @@
+<template>
+	<lightning-card>
+		<center>
+			<template if:true={showSaveButton}>
+				<lightning-button variant="brand" label="Save" onclick={handleClick}></lightning-button>
+			</template>
+		</center>
+		<div slot='actions'>
+			<lightning-input type="toggle" label="Active Resource" onchange={handleToggleChange} checked>
+			</lightning-input>
+		</div>
+		<template if:true={showDataSpinner}>
+			<lightning-spinner alternative-text="Loading" size="medium" variant="base"></lightning-spinner>
+		</template>
+		<div class="slds-m-around_medium">
+			<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+				<thead>
+					<tr class="slds-line-height_reset">
+						<th colspan="0"></th>
+						<th>Resource Name</th>
+						<th>Project Role</th>
+						<th>Status</th>
+						<th>Allocation</th>
+						<th>Allocation Unit </th>
+						<th>Start Date</th>
+						<th>End Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<template for:each={contactList} for:item="item" for:index="index">
+						<tr key={item.Id}>
+							<td>
+								<lightning-icon icon-name="action:approval" size="x-small" style="width: 100%;">
+								</lightning-icon>
+							</td>
+							<td>
+								<lightning-input type="text" variant="standard" value={item.Resource__r.Name}
+									style="width: 100%;" disabled>
+								</lightning-input>
+
+							</td>
+							<td>
+								<template if:true={projectRoleValues.data}>
+									<lightning-combobox placeholder="Select Role" value={item.Project_Role__c}
+										options={projectRoleValues.data.values} style="width:  100%;"
+										onchange={handlevalues} data-input='role' data-index={index}>
+									</lightning-combobox>
+								</template>
+							</td>
+							<td>
+								<template if:true={resourceourceValues.data}>
+									<lightning-combobox value={item.Status__c} options={resourceourceValues.data.values}
+										onchange={handlevalues} style="width: 100%;" data-input='status'
+										data-index={index}>
+									</lightning-combobox>
+								</template>
+							</td>
+							<td>
+								<template if:true={allocationUnitValues.data}>
+									<lightning-combobox value={item.Allocation_Unit__c}
+										options={allocationUnitValues.data.values} onchange={handlevalues}
+										data-index={index} data-input='unit' style="width:100%;">
+									</lightning-combobox>
+								</template>
+							</td>
+							<td>
+								<lightning-input type="decimal" variant="standard" value={item.Allocation__c}
+									style="width:  100%;" data-input='allocation' onchange={handlevalues}
+									data-index={index}>
+								</lightning-input>
+							</td>
+							<td>
+								<lightning-input type="date" value={item.Start_Date__c} data-index={index}
+									onchange={handlevalues} style="width: 100%;" data-input='startdate'>
+								</lightning-input>
+							</td>
+							<td>
+								<lightning-input type="date" value={item.End_Date__c} onchange={handlevalues}
+									data-index={index} data-input='enddate' style="width: 100%;">
+								</lightning-input>
+							</td>
+						</tr>
+					</template>
+
+					<template for:each={selectedRows} for:item="item" for:index="index">
+						<tr key={item.Id}>
+							<td>
+								<lightning-icon icon-name="utility:close" size="xx-small" style="width: 100%;"
+									onclick={handleRemoveSelected} data-item-id={item.Id}></lightning-icon>
+							</td>
+							<td>
+								<lightning-input type="text" variant="standard" value={item.Name}
+									style="width:  100%;" disabled>
+								</lightning-input>
+							</td>
+							<td>
+								<template if:true={projectRoleValues.data}>
+									<lightning-combobox placeholder="Select Role"
+										options={projectRoleValues.data.values} onchange={handleRoleValue}
+										style="width:  100%;" data-role={index}>
+									</lightning-combobox>
+								</template>
+							</td>
+							<td>
+								<template if:true={resourceourceValues.data}>
+									<lightning-combobox placeholder="Select Status" value="Active"
+										options={resourceourceValues.data.values} onchange={handleActiveChange}
+										style="width:  100%;" data-status={index}>
+									</lightning-combobox>
+								</template>
+							</td>
+							<td>
+								<template if:true={allocationUnitValues.data}>
+									<lightning-combobox placeholder="Select Unit"
+										options={allocationUnitValues.data.values} onchange={handleunitChange}
+										style="width: 100%;" data-unit={index}>
+									</lightning-combobox>
+								</template>
+							</td>
+							<td>
+								<lightning-input type="decimal" variant="standard" style="width: 100%;" value="100"
+									onchange={handleAllocationvalue} data-allocation={index}>
+								</lightning-input>
+							</td>
+							<td>
+								<lightning-input type="date" variant="standard" style="width: 100%;"
+									value={projectStartDateValidator} onchange={handlestartDateChange}
+									data-start={index}></lightning-input>
+							</td>
+							<td>
+								<lightning-input type="date" variant="standard" style="width: 100%;"
+									value={projectEndDateValidator} onchange={handleEndDateChange} data-end={index}>
+								</lightning-input>
+							</td>
+						</tr>
+					</template>
+
+				</tbody>
+			</table>
+		</div>
+
+	</lightning-card><br>
+	<lightning-card>
+		<template if:true={showDataSpinner}>
+			<lightning-spinner alternative-text="Loading" size="medium" variant="base"></lightning-spinner>
+		</template>
+		<div slot="actions">
+			<div class="slds-grid slds-gutters slds-p-around_medium">
+				<div class="slds-col">
+
+					<lightning-input type="toggle" label={toggleLabel} name="input" onchange={handleActionChange}
+						checked={isSelectedActionExpand} message-toggle-active="" message-toggle-inactive="">
+					</lightning-input>
+				</div>
+				<div class="slds-col">
+					<template if:true={teamNotSelect}>
+						<lightning-combobox variant="label-hidden" placeholder="Select Team" options={options}
+							onchange={handleChangedvalue} style="width:200px;"></lightning-combobox>
+					</template>
+					<template if:false={teamNotSelect}>
+						<lightning-combobox variant="label-hidden" placeholder="Select Team" options={options}
+							onchange={handleChangedvalue} style="width:200px;"></lightning-combobox>
+					</template>
+				</div>
+				<div class="slds-col">
+					<template if:true={showSearchData}>
+						<lightning-input type="search" onchange={handleSearchOnteamResource} label="Enter text"
+							variant="label-hidden" placeholder="Find Available Resource...">
+						</lightning-input>
+					</template>
+					<template if:false={showSearchData}>
+						<lightning-input type="search" onchange={handleSearchOnChange} label="Enter text"
+							variant="label-hidden" placeholder="Find Resource here..." disabled={disable}>
+						</lightning-input>
+					</template>
+				</div>
+			</div>
+		</div>
+		<div>
+
+			<template if:true={showTeamNameData}>
+				<lightning-accordion allow-multiple-sections-open active-section-name="A">
+					<lightning-accordion-section name="A" label={selectedTeamName}>
+						<div class="slds-box">
+							<lightning-card>
+								<lightning-icon icon-name="standard:work_type" size="small"
+									style="margin-left:17px;margin-bottom:17px">
+								</lightning-icon>&nbsp;&nbsp;&nbsp;<b>{selectedTeamName}</b><br><br>
+								<template if:true={handleChangedvalue}>
+									<div class="scrollable-content">
+										<div class="slds-m-around_medium">
+											<table
+												class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+												<thead>
+													<tr class="slds-line-height_reset">
+														<th colspan="0"></th>
+														<th>Resource Name</th>
+														<th>Experience</th>
+													</tr>
+												</thead>
+												<tbody>
+													<template if:true={showSpinner}>
+														<lightning-spinner alternative-text="Loading" size="medium"
+															variant="base"></lightning-spinner>
+													</template>
+													<template for:each={searchList} for:item="item" for:index="index">
+														<tr key={item.Id}>
+															<td>
+																<lightning-input type="checkbox" variant="standard"
+																	onchange={handlecheckboxvalue}
+																	data-item-id={item.Id} data-index={index}
+																	data-elementid={item.Id}>
+																</lightning-input>
+															</td>
+															<td>
+																<a onclick={handleNameClick}
+																	data-item-id={item.Id}>{item.Name}</a>
+															</td>
+															<td>
+																{item.Experience__c}
+															</td>
+														</tr>
+													</template>
+
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</template>
+
+								<br>
+								<template if:true={resourceAvailableData}>
+									<center>NO AVAILABLE RESOURCES...</center>
+								</template>
+							</lightning-card>
+						</div>
+					</lightning-accordion-section>
+				</lightning-accordion>
+			</template>
+		</div>
+
+		<template if:true={hidetTotalData}>
+			<lightning-accordion allow-multiple-sections-open class="slds-m-around_medium"
+				active-section-name={activeSections}>
+				<template for:each={finalTeamResourcesearch} for:item="practice">
+					<lightning-accordion-section key={practice.name} name={practice.name} label={practice.label}>
+						<div class="scrollable-content">
+							<table
+								class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+								<thead>
+									<tr>
+										<th colspan="0"></th>
+										<th>Resource Name</th>
+										<th>Experience</th>
+									</tr>
+								</thead>
+								<tbody>
+									<template for:each={practice.records} for:item="resource" for:index="index">
+										<tr key={resource.Id}>
+											<td>
+												<lightning-input type="checkbox" variant="standard"
+													onchange={handleCheck} data-item-id={resource.Id} data-index={index}
+													data-elementid={resource.Id} data-group={practice.name}>
+												</lightning-input>
+											</td>
+											<td><a onclick={handleNameClick}
+													data-item-id={resource.Id}>{resource.Name}</a></td>
+											<td>{resource.Experience__c}</td>
+										</tr>
+									</template>
+								</tbody>
+							</table>
+						</div>
+					</lightning-accordion-section>
+				</template>
+				<template if:true={showNoResource}>
+					<b><center>No Matching Available Resources..</center></b>
+				</template>
+			</lightning-accordion>
+		</template>
+
+	</lightning-card>
+</template>

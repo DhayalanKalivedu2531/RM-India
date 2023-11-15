@@ -1,0 +1,11 @@
+<template>
+	<lightning-card>
+			<h1 class="slds-var-m-around_medium">Data Analysis Duration</h1>
+			<div if:true={isChartJsInitialized} class="canvas-con-inner">
+				<canvas class="stackedBarChart" lwc:dom="manual"></canvas>
+			</div>
+			<div if:false={isChartJsInitialized} class="slds-col--padded slds-size--1-of-1">
+				<lightning-spinner alternative-text="Loading" size="medium" variant="base"></lightning-spinner>
+			</div>
+		</lightning-card>
+</template>
