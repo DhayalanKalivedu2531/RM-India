@@ -1,0 +1,13 @@
+<template>
+    <lightning-card title="Current Resource Overview">
+        <div slot="actions">
+                        <c-available-report-to-excel></c-available-report-to-excel>&nbsp;&nbsp;
+        </div> 
+        <div class="canvas-con-inner">
+            <canvas class="doughnutChart" style="position:relative" lwc:dom="manual"></canvas>
+        <template if:false={isChartJsInitialized}>
+                <lightning-spinner alternative-text="Loading" size="medium" variant="base"></lightning-spinner>
+            </template>
+        </div>
+    </lightning-card>
+    </template>

@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="Efficiency Overview">
+        <div slot="actions">
+            <div class="slds-grid slds-gutters slds-p-around_medium">               
+            <c-billable-report-to-excel></c-billable-report-to-excel>
+            </div>
+        </div>
+        <div class="canvas-con-inner">
+            <canvas class="doughnutChart" style="position:relative" lwc:dom="manual"></canvas>
+            <template if:false={isChartJsInitialized}>
+                <lightning-spinner alternative-text="Loading" size="medium" variant="base"></lightning-spinner>
+            </template>
+        </div>
+    </lightning-card>
+</template>
