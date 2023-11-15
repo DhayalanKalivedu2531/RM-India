@@ -1,0 +1,41 @@
+<template>
+	<lightning-card title="Publisher Component">
+        <template if:true={passSelectedId}>
+       <center> <lightning-button variant="brand" label="ShowRelatedContact" onclick={handleRelatedContact}></lightning-button> </center>
+        </template>
+		<div class="scrollable-content">
+			<div class="slds-m-around_medium">
+				<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+					<thead>
+						<tr class="slds-line-height_reset">
+							<th colspan="0"></th>
+							<th>Account Name</th>
+							<th>Industry</th>
+							<th>Phone</th>
+						</tr>
+					</thead>
+					<tbody>
+						<template for:each={accountDetails} for:item="item" for:index="index">
+							<tr key={item.Id}>
+								<td>
+									<lightning-input type="checkbox" variant="standard" onchange={handlecheckboxvalue}
+										data-item-id={item.Id} data-index={index} data-elementid={item.Id}>
+									</lightning-input>
+								</td>
+								<td>
+									<a onclick={handleNameClick} data-item-id={item.Id}>{item.Name}</a>
+								</td>
+								<td>
+									{item.Industry}
+								</td>
+								<td>
+									{item.Phone}
+								</td>
+							</tr>
+						</template>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</lightning-card>
+</template>

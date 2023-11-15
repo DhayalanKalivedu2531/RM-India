@@ -1,0 +1,115 @@
+<template>
+	<lightning-card title="Subscriber Component">
+        <template if:true={showCreation}>
+		<center><lightning-button variant="neutral" label="Create Case" onclick={handleClick}></lightning-button></center>
+        </template>
+		<template if:true={showData}>
+			<div class="scrollable-content">
+				<div class="slds-m-around_medium">
+					<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+						<thead>
+							<tr class="slds-line-height_reset">
+								<th colspan="0"></th>
+								<th>Contact Name</th>
+								<th>Account Name</th>
+								<th>Phone</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template for:each={relatedContactData} for:item="item" for:index="index">
+								<tr key={item.Id}>
+									<td>
+										<lightning-input type="checkbox" variant="standard" onchange={handlecheckboxvalue}
+										data-item-id={item.Id} data-index={index} data-elementid={item.Id} disabled={disabledData}>
+									</lightning-input>
+									</td>
+									<td>
+										<a onclick={handleNameClick} data-item-id={item.Id}>{item.Name}</a>
+									</td>
+									<td>
+										{item.Account.Name}
+									</td>
+									<td>
+										{item.Phone}
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</template>
+		<template if:false={showData}>
+			<center><b>Please Select Account</b></center>
+		</template>
+		<template if:true={showCreateCase}>
+			<section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+				class="slds-modal slds-fade-in-open slds-modal_small">
+				<div class="slds-modal__container">
+					<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+<svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+<use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+</svg>
+<span class="slds-assistive-text">Cancel and close</span>
+</button>
+					<div class="slds-modal__header">
+						<h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Case Creation</h1>
+					</div>
+					<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+						<lightning-layout horizontal-align="space">
+							<lightning-layout-item flexibility="auto" size="6" padding="around-small">
+								<lightning-combobox placeholder="Select Role" label="Case Origin"
+									options={originValues.data.values} style="width:  100%;" onchange={handleOrigin}
+									data-input='role' required="true">
+								</lightning-combobox>
+							</lightning-layout-item>
+							<lightning-layout-item flexibility="auto" size="6" padding="around-small">
+								<lightning-combobox placeholder="Select Role" label="Status"
+									options={statusValues.data.values} style="width: 100%;" onchange={handleStatus}
+									data-input='role' required="true">
+								</lightning-combobox>
+							</lightning-layout-item>
+						</lightning-layout>
+                        <lightning-layout horizontal-align="space">
+                        <lightning-layout-item flexibility="auto" size="6" padding="around-small">      
+                            <lightning-combobox placeholder="Select Role" label="Case Reason"
+										options={reasonValues.data.values} style="width:  100%;"
+										onchange={handleReason} data-input='role'>
+									</lightning-combobox>          
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" size="6" padding="around-small">   
+                            <lightning-combobox placeholder="Select Role" label="Type"
+										options={TypeValues.data.values} style="width:  100%;"
+										onchange={handleType} data-input='role'>
+									</lightning-combobox>                
+                        </lightning-layout-item>    
+                    </lightning-layout>
+                    <lightning-layout horizontal-align="space">
+                        <lightning-layout-item flexibility="auto" size="6" padding="around-small">      
+                            <lightning-input type="text" variant="standard" label="Account" value={accountNameValue} disabled="true"></lightning-input>        
+                        </lightning-layout-item> 
+                        <lightning-layout-item flexibility="auto" size="6" padding="around-small">
+                        </lightning-layout-item>  
+                    </lightning-layout>
+                     <lightning-layout horizontal-align="space">
+                         <lightning-layout-item flexibility="auto" size="6" padding="around-small">
+                             <lightning-input type="text" variant="standard" label="Contact" value={contactNameValue} disabled="true"></lightning-input>        
+                         </lightning-layout-item>
+                         <lightning-layout-item flexibility="auto" size="6" padding="around-small">
+                              <lightning-combobox placeholder="Select Role" label="Priority"
+										options={PriorityValues.data.values} style="width:100%;"
+										onchange={handlePriority}>
+									</lightning-combobox>  
+                         </lightning-layout-item>
+                     </lightning-layout>
+					</div>
+					<div class="slds-modal__footer">
+						<button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={handleClosePop}>Cancel</button>
+						<button class="slds-button slds-button_brand" onclick={handleCreationNewCase}>Save</button>
+					</div>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+		</template>
+	</lightning-card>
+</template>
