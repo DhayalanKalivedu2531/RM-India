@@ -6,7 +6,7 @@ export default class ChildLMSSubscriber extends LightningElement {
     @wire(MessageContext)messageContext;
     connectedCallback() {
         this.handleSubscribe();
-    }
+    }//
     handleSubscribe() {
         subscribe(this.messageContext, serviceChannel, 
             (parameter) =>{
