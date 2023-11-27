@@ -1,0 +1,14 @@
+<template>
+    <div class="slds-box slds-theme_default blackColor">
+       <center> <h1 style="color:white; font-size:40px;">{time} </h1></center>
+       <template if:true={showMorning}>
+      <center> <h1 style="color:white; font-size:20px;">GOOD MORNING - DHAYAL</h1> </center>
+       </template>
+       <template if:true={showNoon}>
+          <center>  <h1 style="color:white; font-size:20px;">GOOD AFTERNOON - DHAYAL</h1> </center>
+       </template>
+        <template if:true={showEvening}>
+          <center>  <h1 style="color:white; font-size:20px;">GOOD Evening - DHAYAL</h1> </center>
+       </template>
+    </div>
+</template>
