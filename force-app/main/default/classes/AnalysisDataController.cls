@@ -25,6 +25,7 @@ public class AnalysisDataController {
                             Integer startYear = resource.Start_Date__c.year();
                             Integer endYear = resource.End_Date__c.year();
                             Integer monthsWorked = (endYear - startYear) * 12 + (endMonth - startMonth + 1);
+                            System.debug(monthsWorked);
                             totalMonths += monthsWorked;
                             if (totalMonths >= 12) {
                                 totalMonths = 12;
